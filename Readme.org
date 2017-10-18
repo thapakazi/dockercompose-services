@@ -1,0 +1,51 @@
+#+TITLE: Making of  nonproduction services with docker-compose
+#+DATE: Wednesday, Oct 18 2017
+
+* Steps: writing the compose file
+  - build the docker-compose file with latest version
+    | services  | version                           | remarks |
+    |-----------+-----------------------------------+---------|
+    | postgres  | postgres:10-alpine                |         |
+    | mysql     | latest                            |         |
+    | redis     | redis:3.2.11-alpine               |         |
+    | memcached | memcached:1.5.2-alpine            |         |
+    | rabbitmq  | rabbitmq:3.6.12-management-alpine |         |
+    | mongo     | mongo:3.4.9                       |         |
+
+  - choose the storage 
+    - storage selection: *30gb* on /
+    - convention
+      | service  | dockermounts   |
+      |----------+----------------|
+      | postgres | /data/postgres |
+      | mysql    | /data/mysql    |
+      | redis    | /data/mysql    |
+      | ...      | ...            |
+  - test on play_with_docker
+    - use play_with_docker function
+      - run:  ~docker-compmose up~
+      - test: source the env first like: ~eval $(docker-machine env node98)~ and then: 
+	#+BEGIN_EXAMPLE
+	 docker exec -it container_name sh
+	#+END_EXAMPLE
+        
+	or to test mongo: you should be seeing mongo ready with
+        replica set: ~rs0~ enabled ;)
+	#+BEGIN_EXAMPLE
+	 docker exec -it myparentdir_mongo_1 mongo
+	#+END_EXAMPLE
+
+* Steps: deploying compose file
+ 1. launch instance: staging-services
+ 2. quick install necessary docker stuffs: [[https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/#install-using-the-convenience-script][quick url]]
+    #+BEGIN_SRC bash
+    curl -fsSL get.docker.com | bash -xv &&  usermod -aG docker ubuntu
+    sudo apt install python3-pip; pip3 install docker-compose
+    #+END_SRC
+    
+    
+    
+  
+        
+
+

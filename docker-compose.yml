@@ -1,0 +1,65 @@
+version: '3.2'
+
+services:
+  postgresql:
+    image: 'postgres:10-alpine'
+    environment:
+      - POSTGRES_USER=my_user
+      - POSTGRES_PASSWORD=my_pa234dsfafsword
+      - POSTGRES_DB=my_db
+    volumes:
+      - '/data/postgresql:/var/lib/postgresql'
+    ports:
+      - 5432:5432
+
+  redis:
+    image: 'redis:3.2.11-alpine'
+    volumes:
+      - '/data/redis:/data'
+    ports:
+      - 6739:6739
+
+  memcached:
+    image: 'memcached:1.5.2-alpine'
+    ports:
+      - 11211:11211
+
+  rabbitmq:
+    image: 'rabbitmq:3.6.12-management-alpine'
+    environment:
+      - RABBITMQ_DEFAULT_USER=hello
+      - RABBITMQ_DEFAULT_PASS=world 
+      - RABBITMQ_DEFAULT_VHOST=hithere
+    volumes:
+      - '/data/rabbitmq:/var/lib/rabbitmq'
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  mongo:
+    image: mongo:3.4.9
+    restart: unless-stopped
+    volumes:
+      - '/data/mongo:/data/db'
+    command: mongod --smallfiles --oplogSize 128 --replSet rs0
+    ports:
+      - 27017:27017
+
+  # little bit of fun with replica-set(its not scalble solution, though)
+  mongo-init-replica-searches:
+    image: mongo:3.4.9
+    command: 'mongo mongo/local --eval "rs.initiate({ _id: ''rs0'', members: [ { _id: 0, host: ''mongo'' } ]})"'
+    depends_on:
+      - mongo
+
+  mysql:
+    image: mysql
+    volumes:
+        - /data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: my_user
+      MYSQL_PASSWORD: my_pass234fsword
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    ports:
+      - 3306:3306
