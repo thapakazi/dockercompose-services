@@ -17,7 +17,7 @@ services:
     volumes:
       - '/data/redis:/data'
     ports:
-      - 6739:6739
+      - 6379:6379
 
   memcached:
     image: 'memcached:1.5.2-alpine'
