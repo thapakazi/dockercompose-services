@@ -34,6 +34,12 @@
 	#+BEGIN_EXAMPLE
 	 docker exec -it myparentdir_mongo_1 mongo
 	#+END_EXAMPLE
+  - single block play_with_docker copy+paste version:
+    #+BEGIN_SRC bash
+    git clone https://github.com/thapakazi/dockercompose-services.git
+    cd dockercompose-services
+    docker-compose up
+    #+END_SRC
 
 * Steps: deploying compose file
  1. launch instance: staging-services
@@ -49,3 +55,4 @@
         
 
 
+ 
