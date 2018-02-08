@@ -1,0 +1,16 @@
+version: "3.5"
+
+
+networks:
+  default:
+    external:
+      name: staging_nginx # docker network create --subnet=192.168.2.0/24 --gateway=192.168.2.1 staging_nginx
+
+services:
+  nginx:
+    image: 'nginx:alpine'
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /data/nginx/conf.d/:/etc/nginx/conf.d
